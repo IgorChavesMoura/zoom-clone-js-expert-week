@@ -4,8 +4,13 @@ class SocketBuilder {
 
         this.socketUrl = socketUrl;
 
-        this.onUserConnected = () => {};
-        this.onUserDisconnected = () => {};
+        const defaultFunctionValue = () => {};
+
+        this.onUserConnected = defaultFunctionValue;
+        this.onUserDisconnected = defaultFunctionValue;
+        this.onJoinedRoom = defaultFunctionValue;
+        this.onMessageSent = defaultFunctionValue;
+        this.onNewChatMessage = defaultFunctionValue;
 
     }
 
@@ -25,6 +30,30 @@ class SocketBuilder {
 
     }
 
+    setOnJoinedRoom(fn) {
+
+        this.onJoinedRoom = fn;
+
+        return this;
+
+    }
+
+    setOnMessageSent(fn){
+
+        this.onMessageSent = fn;
+
+        return this;
+
+    }
+
+    setOnNewChatMessage(fn){
+
+        this.onNewChatMessage = fn;
+
+        return this;
+
+    }
+
     build(){
 
         const socket = io.connect(this.socketUrl, {
@@ -36,6 +65,12 @@ class SocketBuilder {
         socket.on('user-connected', this.onUserConnected);
 
         socket.on('user-disconnected', this.onUserDisconnected);
+
+        socket.on('joined-room', this.onJoinedRoom);
+
+        socket.on('message-sent', this.onMessageSent);
+
+        socket.on('new-chat-message', this.onNewChatMessage);
 
         return socket;
 

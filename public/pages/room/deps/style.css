@@ -78,8 +78,71 @@
 }
 
 .messages {
+
     color: white;
     list-style: none;
+    
+    padding: 0 5px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+}
+
+.messages > .message {
+
+    position: relative;
+
+    border-radius: 4px;
+    
+    padding: 10px;
+
+    margin: 10px 0;
+
+    max-width: 80%;
+    
+    min-width: 200px;
+
+    background-color: #525252;
+
+}
+
+.messages > .current-user-message {
+
+    background-color: #206eff !important;
+
+    align-self: flex-end;
+
+}
+
+.messages > .pending::after {
+
+    font-family: "Font Awesome 5 Free";
+    font-weight: 400;
+
+    content: "\f017";
+
+    position: absolute;
+
+    right: 5px;
+    top: 5px;
+
+    color: #fff;
+
+}
+
+.messages > .message > span {
+
+    position: absolute;
+
+    right: 5px;
+    bottom: 5px;
+
+    font-size: 12px;
+
 }
 
 .main__message_container {

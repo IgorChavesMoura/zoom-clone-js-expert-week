@@ -33,10 +33,14 @@ class Business {
 
         this.view.configureRecordButton(this.onRecordPressed.bind(this));
         this.view.configureLeaveButton(this.onLeavePressed.bind(this));
+        this.view.configureChatMessageForm(this.onChatMessageSubmitted.bind(this));
 
         this.currentStream = await this.media.getCamera(true);
 
         this.socket = this.socketBuilder
+                                    .setOnJoinedRoom(this.onJoinedRoom())
+                                    .setOnMessageSent(this.onChatMessageSent())
+                                    .setOnNewChatMessage(this.onNewChatMessage())
                                     .setOnUserConnected(this.onUserConnected())
                                     .setOnUserDisconnected(this.onUserDisconnected())
                                     .build();
@@ -79,9 +83,31 @@ class Business {
 
     }
 
+    onJoinedRoom(){
+
+        return ({ roomChat }) => {
+
+            roomChat.forEach(
+                roomChatMessage => {
+
+                    roomChatMessage.when = new Date(roomChatMessage.when);
+
+                    this.view.addMessageToChat(roomChatMessage);
+
+                }
+            );
+
+            console.log('room chat!', roomChat);
+
+
+
+        };
+
+    }
+
     onUserConnected(){
 
-        return userId => {
+        return ({ userId }) => {
 
             console.log('user connected!', userId);
 
@@ -221,6 +247,56 @@ class Business {
     onLeavePressed(){
 
         this.userRecordings.forEach((value, key) => value.download());
+
+    }
+
+    onChatMessageSubmitted(formData){
+
+        const newMessageContent = formData.get("message");
+
+        if(!!newMessageContent){
+
+            const newMessage = { id: `${this.currentPeer.id}:${Date.now()}`, content: newMessageContent, when:new Date(), userId: this.currentPeer.id };
+
+            this.view.addMessageToChat(newMessage, this.currentPeer.id, true);
+
+            this.sendMessage(newMessage);
+
+        }
+
+        
+
+    }
+
+    onChatMessageSent(){
+
+        return (messageId) => {
+
+            console.log('message sent!', messageId);
+
+            this.view.updateMessageSent(messageId);
+
+        };
+
+    }
+
+    onNewChatMessage(){
+
+        return (message) => {
+
+            message.when = new Date(message.when);
+
+            console.log('new chat message!', message);
+
+            this.view.addMessageToChat(message);
+
+        }
+
+    }
+
+    sendMessage(message){
+
+        this.socket.emit('new-chat-message', message);
 
     }
 

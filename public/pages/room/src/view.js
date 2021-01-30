@@ -4,6 +4,8 @@ class View {
         
         this.recorderBtn = document.getElementById('record');
         this.leaveBtn = document.getElementById('leave');
+
+        this.chatMessageForm = document.getElementById('chat_message');
         
 
     }
@@ -120,6 +122,66 @@ class View {
 
     }
 
+    onChatMessageSubmit(command){
+
+        return (event) => {
+
+            event.preventDefault();
+
+            const formData = new FormData(this.chatMessageForm);
+
+            command(formData);
+
+            this.chatMessageForm.reset();
+
+        };
+
+    }
+
+
+    addMessageToChat(message, currentUserId, pending = false){
+
+        const messageList = document.getElementById('messages');
+
+        const newMessageElement = document.createElement('li');
+
+        newMessageElement.id = message.id;
+        
+        newMessageElement.innerHTML = `<h6>${message.userId}</h6>
+                                       <p>${message.content}</p>
+                                       <span>${message.when.getHours()}:${message.when.getMinutes() < 10 ? `0${message.when.getMinutes()}` : message.when.getMinutes()}</span>`;
+
+        newMessageElement.classList.add("message");
+
+        if(message.userId == currentUserId){
+
+            newMessageElement.classList.add("current-user-message");
+
+        }
+
+        if(pending){
+
+            newMessageElement.classList.add("pending");
+
+        }
+
+        messageList.append(newMessageElement);
+
+
+    }
+
+    updateMessageSent(messageId){
+
+        const messageElement = document.getElementById(messageId);
+
+        if(!!messageElement){
+
+            messageElement.classList.remove('pending');
+
+        }
+
+    }
+
     configureRecordButton(command){
 
         this.recorderBtn.addEventListener('click', this.onRecordClick(command));
@@ -131,5 +193,12 @@ class View {
         this.leaveBtn.addEventListener('click', this.onLeaveClick(command));
 
     }
+
+    configureChatMessageForm(command){
+
+        this.chatMessageForm.addEventListener('submit', this.onChatMessageSubmit(command));
+
+    }
+
 
 }

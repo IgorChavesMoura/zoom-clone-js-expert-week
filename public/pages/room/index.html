@@ -79,35 +79,46 @@
           <h6>Chat</h6>
         </div>
         <div class="main__chat_window">
-          <ul class="messages">
-            <li class="message" >
+          <ul id="messages" class="messages">
+            <!-- <li class="message" >
               <h6>Feller User</h6>
               <p>Hey there!</p>
+              <span>15:27</span>
             </li>
             <li class="message" >
               <h6>Feller User</h6>
               <p>Hey there!</p>
+              <span>15:28</span>
+            </li>
+            <li class="message" >
+              <h6>Feller User</h6>
+              <p>Hey there! This is a longer message, lets check how the component behaves</p>
+              <span>15:29</span>
+            </li>
+            <li class="message current-user-message" >
+              <h6>Feller User</h6>
+              <p>Hey there!</p>
+              <span>15:30</span>
             </li>
             <li class="message" >
               <h6>Feller User</h6>
               <p>Hey there!</p>
-            </li>
-            <li class="message" >
+              <span>15:31</span>
+            </li> -->
+            <!-- <li class="message current-user-message pending" >
               <h6>Feller User</h6>
-              <p>Hey there!</p>
-            </li>
-            <li class="message" >
-              <h6>Feller User</h6>
-              <p>Hey there!</p>
-            </li>
+              <p>How are you?</p>
+            </li> -->
           </ul>
         </div>
         <div class="main__message_container">
-          <input
-            id="chat_message"
-            type="text"
-            placeholder="Type message here..."
-          />
+          <form id="chat_message" >
+            <input
+              name="message"
+              type="text"
+              placeholder="Type message here..."
+            />
+          </form>
         </div>
       </div>
     </div>
